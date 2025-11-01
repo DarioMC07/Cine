@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - CineMoon</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-900 text-white">
+    <nav class="fixed top-0 w-full z-40 bg-gray-900/80 backdrop-blur-lg border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="index.html" class="flex items-center space-x-2">
+                    <svg class="w-8 h-8 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"></path>
+                    </svg>
+                    <span class="text-2xl font-bold bg-gradient-to-r from-yellow-500 to-yellow-500 bg-clip-text text-transparent">CineEstrellas</span>
+                </a>
+                <div class="hidden md:flex items-center space-x-1">
+                    <a href="index.html" class="nav-link px-4 py-2 rounded-lg">Inicio</a>
+                    <a href="cartelera.html" class="nav-link px-4 py-2 rounded-lg">Cartelera</a>
+                    <a href="calendario.html" class="nav-link px-4 py-2 rounded-lg">Calendario</a>
+                    <a href="eventos.html" class="nav-link px-4 py-2 rounded-lg">Eventos</a>
+                    <a href="registro.html" class="nav-link active px-4 py-2 rounded-lg">Registro</a>
+                </div>
+                <button id="mobile-menu-btn" class="md:hidden text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div id="mobile-menu" class="hidden fixed top-16 left-0 right-0 bg-gray-900/95 backdrop-blur-lg z-30 border-b border-gray-800">
+        <div class="px-4 py-4 space-y-2">
+            <a href="index.html" class="block px-4 py-2 rounded-lg hover:bg-gray-800">Inicio</a>
+            <a href="cartelera.html" class="block px-4 py-2 rounded-lg hover:bg-gray-800">Cartelera</a>
+            <a href="calendario.html" class="block px-4 py-2 rounded-lg hover:bg-gray-800">Calendario</a>
+            <a href="eventos.html" class="block px-4 py-2 rounded-lg hover:bg-gray-800">Eventos</a>
+            <a href="registro.html" class="block px-4 py-2 rounded-lg bg-yellow-500 text-white">Registro</a>
+        </div>
+    </div>
+
+    <div class="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-6xl mx-auto">
+            <div id="form-view">
+                <div class="text-center mb-12 space-y-4">
+                    <h1 class="text-5xl md:text-6xl font-bold bg-gradient-to-r from-yellow-500 to-yellow-500 bg-clip-text text-transparent">
+                        Únete a CineMoon
+                    </h1>
+                    <p class="text-xl text-gray-400">Regístrate y disfruta de beneficios exclusivos</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+                    <div class="lg:col-span-3">
+                        <div class="bg-gray-800/50 rounded-2xl border border-gray-700 p-8">
+                            <h2 class="text-2xl font-bold mb-2">Información Personal</h2>
+                            <p class="text-gray-400 mb-6">Completa el formulario para crear tu cuenta</p>
+                            
+                            <form id="register-form" class="space-y-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-semibold mb-2">Nombre <span class="text-yellow-500">*</span></label>
+                                        <input type="text" name="nombre" required class="form-input" placeholder="Juan" />
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-semibold mb-2">Apellido <span class="text-pink-500">*</span></label>
+                                        <input type="text" name="apellido" required class="form-input" placeholder="Pérez" />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-semibold mb-2">Email <span class="text-pink-500">*</span></label>
+                                    <input type="email" name="email" required class="form-input" placeholder="juan.perez@ejemplo.com" />
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-semibold mb-2">Teléfono</label>
+                                    <input type="tel" name="telefono" class="form-input" placeholder="+34 123 456 789" />
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-semibold mb-2">Fecha de Nacimiento</label>
+                                    <input type="date" name="fechaNacimiento" class="form-input" />
+                                </div>
+
+                                <div class="space-y-3 pt-4 border-t border-gray-700">
+                                    <label class="flex items-center space-x-2 cursor-pointer">
+                                        <input type="checkbox" name="newsletter" checked class="w-4 h-4 rounded border-gray-700 text-yellow-500 focus:ring-yellow-500" />
+                                        <span class="text-sm">Quiero recibir noticias sobre próximas proyecciones y eventos especiales</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2 cursor-pointer">
+                                        <input type="checkbox" name="promociones" checked class="w-4 h-4 rounded border-gray-700 text-yellow-500 focus:ring-pink-500" />
+                                        <span class="text-sm">Deseo recibir ofertas y promociones exclusivas</span>
+                                    </label>
+                                </div>
+
+                                <button type="submit" class="btn-primary w-full text-lg py-3">Crear Cuenta</button>
+
+                                <p class="text-xs text-center text-gray-400">
+                                    Al registrarte, aceptas nuestros términos de servicio y política de privacidad
+                                </p>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-2 space-y-6">
+                        <div class="bg-gray-800/50 rounded-2xl border border-gray-700 p-6">
+                            <h3 class="text-xl font-bold mb-4">Beneficios de Miembro</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-start space-x-3 p-3 bg-gray-900/50 rounded-lg">
+                                    <svg class="w-5 h-5 text-yellow-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <div>
+                                        <h4 class="font-semibold">Acceso Anticipado</h4>
+                                        <p class="text-sm text-gray-400">Reserva tus entradas antes que el público general</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-3 p-3 bg-gray-900/50 rounded-lg">
+                                    <svg class="w-5 h-5 text-yellow-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <div>
+                                        <h4 class="font-semibold">Descuentos Exclusivos</h4>
+                                        <p class="text-sm text-gray-400">Hasta 20% de descuento en entradas y combo</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-3 p-3 bg-gray-900/50 rounded-lg">
+                                    <svg class="w-5 h-5 text-yellow-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <div>
+                                        <h4 class="font-semibold">Eventos Especiales</h4>
+                                        <p class="text-sm text-gray-400">Invitaciones a preestrenos y funciones temáticas</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-3 p-3 bg-gray-900/50 rounded-lg">
+                                    <svg class="w-5 h-5 text-yellow-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <div>
+                                        <h4 class="font-semibold">Programa de Puntos</h4>
+                                        <p class="text-sm text-gray-400">Acumula puntos y canjéalos por entradas gratis</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-gradient-to-br from-yellow-500/20 to-purple-500/20 border border-yellow-500/50 rounded-2xl p-6 text-center space-y-4">
+                            <h3 class="text-2xl font-bold">¡Oferta de Lanzamiento!</h3>
+                            <p class="text-lg">
+                                Regístrate hoy y recibe <span class="text-yellow-500 font-bold">2 entradas gratis</span> para tu primera proyección
+                            </p>
+                            <p class="text-sm text-gray-400">Válido para nuevos miembros hasta fin de mes</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="success-view" style="display: none;">
+                <div class="max-w-2xl mx-auto bg-gradient-to-br from-pink-500/20 to-purple-500/20 border border-pink-500/50 rounded-2xl p-12 text-center space-y-6">
+                    <div class="inline-block p-6 bg-yellow-500/20 rounded-full">
+                        <svg class="w-24 h-24 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h1 class="text-4xl font-bold">¡Bienvenido a CineMoon!</h1>
+                    <p class="text-xl text-gray-300">
+                        Gracias por registrarte, <span id="user-name"></span>. Pronto recibirás noticias sobre nuestras proyecciones y eventos especiales.
+                    </p>
+                    <div class="space-y-3 text-left max-w-md mx-auto">
+                        <div class="flex items-center space-x-3 p-3 bg-gray-900/50 rounded-lg">
+                            <svg class="w-5 h-5 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span>Acceso anticipado a reservas</span>
+                        </div>
+                        <div class="flex items-center space-x-3 p-3 bg-gray-900/50 rounded-lg">
+                            <svg class="w-5 h-5 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span>Descuentos exclusivos para miembros</span>
+                        </div>
+                        <div class="flex items-center space-x-3 p-3 bg-gray-900/50 rounded-lg">
+                            <svg class="w-5 h-5 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span>Notificaciones de estrenos</span>
+                        </div>
+                    </div>
+                    <button onclick="resetForm()" class="btn-primary text-lg py-3 px-8 mt-6">Volver al Formulario</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="border-t border-gray-800 py-8 px-4">
+        <div class="max-w-7xl mx-auto text-center space-y-4">
+            <div class="flex justify-center items-center space-x-2">
+                <svg class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"></path>
+                </svg>
+                <span class="text-xl font-bold">CineMoon</span>
+            </div>
+            <p class="text-gray-400">© 2025 CineMoon. La magia del cine bajo las estrellas.</p>
+        </div>
+    </footer>
+
+    <script src="data.js"></script>
+    <script src="main.js"></script>
+    <script src="registro.js"></script>
+</body>
+</html>
