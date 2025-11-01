@@ -10,7 +10,7 @@ const movies = [
         director: "Christopher Nolan",
         rating: 4.8,
         synopsis: "Un grupo de exploradores espaciales viaja a través de un agujero de gusano en el espacio en un intento de garantizar la supervivencia de la humanidad.",
-        poster: "/public/images/interestelar.jpg",
+        poster: "/images/interestelar.jpg",
         trailer: "zSWdZVtXT7E",
         upcoming: false
     },
