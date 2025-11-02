@@ -24,7 +24,7 @@ const movies = [
         director: "Baz Luhrmann",
         rating: 4.3,
         synopsis: "Un escritor y corredor de bolsa, Nick Carraway, encuentra el camino al mundo del misterioso millonario Jay Gatsby y su amor por Daisy Buchanan.",
-        poster: "/public/images/Gastby.jpg",
+        poster: "/images/Gastby.jpg",
         trailer: "rARN6agiW7o",
         upcoming: false
     },
@@ -38,7 +38,7 @@ const movies = [
         director: "Damien Chazelle",
         rating: 4.6,
         synopsis: "Una historia de amor entre un pianista de jazz y una actriz aspirante en Los Ángeles mientras persiguen sus sueños en una ciudad conocida por destruir esperanzas y romper corazones.",
-        poster: "/public/images/la la land.jpg",
+        poster: "/images/la la land.jpg",
         trailer: "0pdqf4P9MB8",
         upcoming: false
     },
@@ -52,7 +52,7 @@ const movies = [
         director: "Denis Villeneuve",
         rating: 4.7,
         synopsis: "Un nuevo blade runner descubre un secreto largamente oculto que tiene el potencial de sumir lo que queda de la sociedad en el caos.",
-        poster: "/public/images/blade.jpg",
+        poster: "/images/blade.jpg",
         trailer: "gCcx85zbxz4",
         upcoming: true
     },
@@ -66,7 +66,7 @@ const movies = [
         director: "Christopher Nolan",
         rating: 4.9,
         synopsis: "Cuando la amenaza conocida como el Joker causa estragos y caos en la gente de Gotham, Batman debe aceptar una de las pruebas psicológicas y físicas más grandes de su capacidad para luchar contra la injusticia.",
-        poster: "/public/images/batman.png",
+        poster: "/images/batman.png",
         trailer: "EXeTwQWrcwY",
         upcoming: false
     },
@@ -80,7 +80,7 @@ const movies = [
         director: "Denis Villeneuve",
         rating: 4.5,
         synopsis: "Paul Atreides, un joven brillante y talentoso nacido con un gran destino, debe viajar al planeta más peligroso del universo para asegurar el futuro de su familia y su pueblo.",
-        poster: "/public/images/dune.jpg",
+        poster: "/images/dune.jpg",
         trailer: "8g18jFHCLXk",
         upcoming: true
     },
@@ -94,7 +94,7 @@ const movies = [
         director: "Kyle Newacheck",
         rating: 4.8,
         synopsis: "El temperamental Happy Gilmore debe mantener la compostura en su regreso al campo de golf para ayudar a su hija a cumplir sus sueños.",
-        poster: "/public/images/happy.jpg",
+        poster: "/images/happy.jpg",
         trailer: "UNFUzrVrmgQ",
         upcoming: true
     },
@@ -108,7 +108,7 @@ const movies = [
         director: "Mel Gibson",
         rating: 4.9,
         synopsis: "Michelle, una agente del Gobierno, debe escoltar durante un vuelo a Winston, un criminal que ha aceptado ofrecer testimonio en un caso que incrimina a un jefe de la mafia. Michelle descubre que el piloto es un sicario contratado para matar a Winston.",
-        poster: "/public/images/Ame.jpg",
+        poster: "/images/Ame.jpg",
         trailer: "8D7mzasIQMU",
         upcoming: false
     }
@@ -254,7 +254,7 @@ const locations = [
         address: "Cerca del nuevo puente al Urubó",
         capacity: 150,
         description: "Nuestro espacio más emblemático de la ciudad. Rodeado de árboles centenarios y con una vista espectacular del cielo nocturno.",
-        image: "/public/images/Urubó.png",
+        image: "/images/Urubó.png",
         amenities: ["Estacionamiento gratuito", "Cafetería", "Baños", "Área de picnic", "Sillas y mantas"]
     },
     {
@@ -263,7 +263,7 @@ const locations = [
         address: "Calle de las Flores 456",
         capacity: 100,
         description: "Un oasis natural perfecto para disfrutar del cine bajo las estrellas, rodeado de flora exótica y el aroma de las flores nocturnas.",
-        image: "/public/images/jardin-botanico.jpg",
+        image: "/images/jardin-botanico.jpg",
         amenities: ["Jardines temáticos", "Cafetería gourmet", "Baños ecológicos", "Tours nocturnos", "Mantas premium"]
     },
     {
@@ -272,7 +272,7 @@ const locations = [
         address: "Torre Panorama, Piso 12",
         capacity: 80,
         description: "Una experiencia cinematográfica exclusiva en las alturas. Disfruta de películas con una vista panorámica de 360° de la ciudad iluminada.",
-        image: "/public/images/quinta.jpg",
+        image: "/images/quinta.jpg",
         amenities: ["Bar premium", "Lounge VIP", "Servicio de catering", "Calefactores", "Asientos reclinables"]
     },
     {
@@ -281,7 +281,7 @@ const locations = [
         address: "Colina del Observatorio s/n",
         capacity: 120,
         description: "El lugar perfecto para los amantes de la astronomía y el cine. Antes de cada función, telescopios disponibles para observar las estrellas.",
-        image: "/public/images/Elfuerte.jpg",
+        image: "/images/Elfuerte.jpg",
         amenities: ["Telescopios", "Guía astronómico", "Zona de camping", "Fogatas permitidas", "Snack bar"]
     }
 ];
