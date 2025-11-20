@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://cine-amber-six.vercel.app/sitemap.xml
