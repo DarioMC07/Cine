@@ -13,28 +13,56 @@ document.getElementById('mobile-menu-btn')?.addEventListener('click', () => {
 });
 
 // Countdown timer
+let COUNTDOWN_TARGET = null;
+function initCountdownTarget() {
+    // Buscar la próxima función que sea futura (fecha + hora > ahora)
+    const sorted = screenings.slice().sort((a, b) => new Date(a.date + ' ' + a.time) - new Date(b.date + ' ' + b.time));
+    const now = Date.now();
+    const nextScreening = sorted.find(s => new Date(s.date + ' ' + s.time).getTime() > now);
+
+    // Base de la fecha: si hay una próxima función futura, úsala; si no, usa ahora
+    const ADD_DAYS = 20;
+    const offsetMs = ADD_DAYS * 24 * 60 * 60 * 1000;
+
+    let baseTime;
+    if (nextScreening) {
+        baseTime = new Date(nextScreening.date + ' ' + nextScreening.time).getTime();
+    } else {
+        baseTime = now;
+    }
+
+    COUNTDOWN_TARGET = baseTime + offsetMs;
+    // show debug target on the page (if element exists)
+    try {
+        const debugEl = document.getElementById('countdown-debug');
+        if (debugEl) debugEl.textContent = 'Cuenta regresiva hasta: ' + new Date(COUNTDOWN_TARGET).toLocaleString();
+    } catch (e) {
+        // ignore
+    }
+}
+
 function updateCountdown() {
-    const nextScreening = screenings
-        .sort((a, b) => new Date(a.date + ' ' + a.time) - new Date(b.date + ' ' + b.time))[0];
-    
-    if (!nextScreening) return;
+    if (!COUNTDOWN_TARGET) initCountdownTarget();
 
-    const now = new Date().getTime();
-    const eventDate = new Date(nextScreening.date + ' ' + nextScreening.time).getTime();
-    const distance = eventDate - now;
+    const now = Date.now();
+    let distance = COUNTDOWN_TARGET - now;
 
-    if (distance > 0) {
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    // If already passed, show zeros and do not go negative
+    if (distance <= 0) {
+        distance = 0;
+        // Optionally, you could reset COUNTDOWN_TARGET here if you want repeating behavior
+    }
 
-        if (document.getElementById('countdown-days')) {
-            document.getElementById('countdown-days').textContent = String(days).padStart(2, '0');
-            document.getElementById('countdown-hours').textContent = String(hours).padStart(2, '0');
-            document.getElementById('countdown-minutes').textContent = String(minutes).padStart(2, '0');
-            document.getElementById('countdown-seconds').textContent = String(seconds).padStart(2, '0');
-        }
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    if (document.getElementById('countdown-days')) {
+        document.getElementById('countdown-days').textContent = String(days).padStart(2, '0');
+        document.getElementById('countdown-hours').textContent = String(hours).padStart(2, '0');
+        document.getElementById('countdown-minutes').textContent = String(minutes).padStart(2, '0');
+        document.getElementById('countdown-seconds').textContent = String(seconds).padStart(2, '0');
     }
 }
 
@@ -139,3 +167,38 @@ function highlightActiveNav() {
 }
 
 highlightActiveNav();
+
+// Generate stars for background
+function createStars() {
+    const container = document.querySelector('.stars-container');
+    if (!container) return;
+
+    const starCount = 100;
+    for (let i = 0; i < starCount; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        
+        // Random position
+        const x = Math.random() * 100;
+        const y = Math.random() * 100;
+        
+        // Random size
+        const size = Math.random() * 2 + 1;
+        
+        // Random duration and delay
+        const duration = Math.random() * 3 + 2;
+        const delay = Math.random() * 5;
+        
+        star.style.left = `${x}%`;
+        star.style.top = `${y}%`;
+        star.style.width = `${size}px`;
+        star.style.height = `${size}px`;
+        star.style.setProperty('--duration', `${duration}s`);
+        star.style.setProperty('--opacity', Math.random());
+        star.style.animationDelay = `${delay}s`;
+        
+        container.appendChild(star);
+    }
+}
+
+window.addEventListener('load', createStars);

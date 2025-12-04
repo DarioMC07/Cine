@@ -115,7 +115,7 @@ function loadDateFilters() {
         return `
             <button 
                 onclick="filterByDate('${date}')" 
-                class="date-filter-btn flex items-center space-x-2 px-4 py-2 rounded-lg border transition-colors ${selectedDate === date ? 'bg-yellow-500 border-yellow-500 text-white' : 'bg-gray-800/50 border-gray-700 hover:border-yellow-500'}"
+                class="date-filter-btn flex items-center space-x-2 px-4 py-2 rounded-lg border transition-all ${selectedDate === date ? 'bg-yellow-500 border-yellow-500 text-black shadow-[0_0_15px_rgba(234,179,8,0.3)]' : 'bg-white/5 border-white/10 hover:border-yellow-500/50 text-gray-300'}"
             >
                 <div class="flex flex-col items-center">
                     <span class="text-xs ${selectedDate === date ? 'opacity-90' : 'opacity-70'}">${month}</span>
@@ -128,7 +128,7 @@ function loadDateFilters() {
     container.innerHTML = `
         <button 
             onclick="filterByDate(null)" 
-            class="date-filter-btn px-4 py-2 rounded-lg border transition-colors ${selectedDate === null ? 'bg-yellow-500 border-yellow-500 text-white' : 'bg-gray-800/50 border-gray-700 hover:border-yellow-500'}"
+            class="date-filter-btn px-4 py-2 rounded-lg border transition-all ${selectedDate === null ? 'bg-yellow-500 border-yellow-500 text-black shadow-[0_0_15px_rgba(234,179,8,0.3)]' : 'bg-white/5 border-white/10 hover:border-yellow-500/50 text-gray-300'}"
         >
             Todas las fechas
         </button>
@@ -230,7 +230,7 @@ function renderScreeningCards(screeningsList) {
         if (!movie) return '';
 
         return `
-            <div class="bg-gray-800/50 rounded-2xl border border-gray-700 overflow-hidden hover:border-yellow-500 transition-colors group">
+            <div class="glass-card overflow-hidden group">
                 <div class="relative aspect-video">
                     <img src="${movie.poster}" alt="${movie.title}" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300" />
                     <div class="absolute top-2 right-2">
@@ -284,7 +284,7 @@ function renderDetailedScreenings(screeningsList) {
         if (!movie) return '';
 
         return `
-            <div class="bg-gray-800/50 rounded-2xl border border-gray-700 overflow-hidden hover:border-pink-500 transition-colors">
+            <div class="glass-card overflow-hidden hover:border-pink-500/50 transition-colors">
                 <div class="flex flex-col sm:flex-row">
                     <div class="sm:w-1/3 relative aspect-[2/3] sm:aspect-auto">
                         <img src="${movie.poster}" alt="${movie.title}" class="object-cover w-full h-full" />

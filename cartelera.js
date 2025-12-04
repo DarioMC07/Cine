@@ -4,7 +4,7 @@ function loadMoviesList() {
     if (!container) return;
 
     container.innerHTML = movies.map(movie => `
-        <div class="bg-gray-800/50 rounded-2xl border border-gray-700 overflow-hidden hover:border-yellow-500 transition-colors">
+        <div class="glass-card overflow-hidden group">
             <div class="flex flex-col md:flex-row">
                 <div class="md:w-1/3 relative aspect-[2/3] md:aspect-auto">
                     <img src="${movie.poster}" alt="${movie.title}" class="object-cover w-full h-full" />
@@ -53,13 +53,13 @@ function loadMoviesList() {
                     </div>
 
                     <div class="flex gap-2">
-                        <button onclick="openTrailer('${movie.trailer}')" class="btn-secondary flex-1 text-sm">
+                        <button onclick="openTrailer('${movie.trailer}')" aria-label="Ver trailer de ${movie.title}" class="btn-secondary flex-1 text-sm">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                             </svg>
                             Ver Trailer
                         </button>
-                        <button onclick="openReserveModal(${movie.id})" class="btn-small flex-1">
+                        <button onclick="openReserveModal(${movie.id})" aria-label="Reservar entrada para ${movie.title}" class="btn-small flex-1">
                             Reservar Entrada
                         </button>
                     </div>
@@ -73,7 +73,7 @@ function loadMoviesList() {
 function openTrailer(trailerId) {
     const modal = document.getElementById('trailer-modal');
     const iframe = document.getElementById('trailer-iframe');
-    
+
     iframe.src = `https://www.youtube.com/embed/${trailerId}?autoplay=1`;
     modal.classList.add('active');
 }
@@ -82,7 +82,7 @@ function openTrailer(trailerId) {
 function closeTrailerModal() {
     const modal = document.getElementById('trailer-modal');
     const iframe = document.getElementById('trailer-iframe');
-    
+
     iframe.src = '';
     modal.classList.remove('active');
 }
@@ -117,7 +117,7 @@ function openReserveModal(movieId) {
             });
 
             return `
-                <div class="bg-gray-800/50 rounded-lg p-4 border border-gray-700 hover:border-yellow-500 transition-colors">
+                <div class="p-4 rounded-lg bg-white/5 border border-white/10 hover:border-yellow-500/50 transition-colors">
                     <div class="flex items-center justify-between flex-wrap gap-4">
                         <div class="flex-1">
                             <p class="font-semibold text-lg capitalize">${dateStr}</p>
@@ -170,5 +170,40 @@ document.getElementById('reserve-modal')?.addEventListener('click', (e) => {
     }
 });
 
+// Close modal buttons (any element with .modal-close)
+document.querySelectorAll('.modal-close').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        // try to close nearest modal
+        const modal = btn.closest('.modal');
+        if (modal) {
+            if (modal.id === 'trailer-modal') closeTrailerModal();
+            else if (modal.id === 'reserve-modal') closeReserveModal();
+            else modal.classList.remove('active');
+        }
+    });
+});
+
 // Initialize
 loadMoviesList();
+
+// If a movie id is provided in the query string (e.g. ?movie=3), open its reserve modal
+(function openReserveFromQuery() {
+    try {
+        const params = new URLSearchParams(window.location.search);
+        const movieParam = params.get('movie');
+        if (movieParam) {
+            const id = Number(movieParam);
+            if (!Number.isNaN(id)) {
+                // wait a moment so the DOM and modals are ready
+                setTimeout(() => {
+                    openReserveModal(id);
+                    // optionally scroll to top so modal is visible on some mobile browsers
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }, 300);
+            }
+        }
+    } catch (e) {
+        // ignore
+    }
+})();

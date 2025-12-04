@@ -1,38 +1,50 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cartelera - CineMoon</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="styles.css">
 </head>
-<body class="bg-gray-900 text-white">
+
+<body class="antialiased">
+    <!-- Background Stars -->
+    <div class="stars-container"></div>
+
     <!-- Navbar -->
-    <nav class="fixed top-0 w-full z-40 bg-gray-900/80 backdrop-blur-lg border-b border-gray-800">
+    <nav class="fixed top-0 w-full z-40 nav-glass">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <a href="index.html" class="flex items-center space-x-2">
-                    <svg class="w-8 h-8 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"></path>
-                    </svg>
-                    <span class="text-2xl font-bold bg-gradient-to-r from-yellow-500 to-yellow-500 bg-clip-text text-transparent">
+            <div class="flex items-center justify-between h-20">
+                <a href="index.html" class="flex items-center space-x-3 group">
+                    <div class="p-2 bg-yellow-500/10 rounded-lg group-hover:bg-yellow-500/20 transition-colors">
+                        <svg class="w-8 h-8 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z">
+                            </path>
+                        </svg>
+                    </div>
+                    <span class="text-2xl font-bold text-gradient">
                         CineMoon
                     </span>
                 </a>
-                
-                <div class="hidden md:flex items-center space-x-1">
-                    <a href="index.html" class="nav-link px-4 py-2 rounded-lg">Inicio</a>
-                    <a href="cartelera.html" class="nav-link active px-4 py-2 rounded-lg">Cartelera</a>
-                    <a href="calendario.html" class="nav-link px-4 py-2 rounded-lg">Calendario</a>
-                    <a href="eventos.html" class="nav-link px-4 py-2 rounded-lg">Eventos</a>
-                    <a href="registro.html" class="nav-link px-4 py-2 rounded-lg">Registro</a>
+
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="nav-link">Inicio</a>
+                    <a href="cartelera.html" class="nav-link active">Cartelera</a>
+                    <a href="calendario.html" class="nav-link">Calendario</a>
+                    <a href="eventos.html" class="nav-link">Eventos</a>
+                    <a href="registro.html" class="btn btn-primary px-6 py-2 text-sm">Registro</a>
                 </div>
 
-                <button id="mobile-menu-btn" class="md:hidden text-white">
+                <button id="mobile-menu-btn"
+                    class="md:hidden text-white p-2 hover:bg-white/10 rounded-lg transition-colors">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
                 </button>
             </div>
@@ -40,33 +52,36 @@
     </nav>
 
     <!-- Mobile Menu -->
-    <div id="mobile-menu" class="hidden fixed top-16 left-0 right-0 bg-gray-900/95 backdrop-blur-lg z-30 border-b border-gray-800">
-        <div class="px-4 py-4 space-y-2">
-            <a href="index.html" class="block px-4 py-2 rounded-lg hover:bg-gray-800">Inicio</a>
-            <a href="cartelera.html" class="block px-4 py-2 rounded-lg bg-pink-500 text-white">Cartelera</a>
-            <a href="calendario.html" class="block px-4 py-2 rounded-lg hover:bg-gray-800">Calendario</a>
-            <a href="eventos.html" class="block px-4 py-2 rounded-lg hover:bg-gray-800">Eventos</a>
-            <a href="registro.html" class="block px-4 py-2 rounded-lg hover:bg-gray-800">Registro</a>
+    <div id="mobile-menu"
+        class="hidden fixed top-20 left-0 right-0 bg-[#0f172a]/95 backdrop-blur-lg z-30 border-b border-white/10">
+        <div class="px-4 py-6 space-y-4">
+            <a href="index.html" class="block px-4 py-3 rounded-xl hover:bg-white/5 text-gray-300">Inicio</a>
+            <a href="cartelera.html"
+                class="block px-4 py-3 rounded-xl bg-yellow-500/10 text-yellow-500 font-medium">Cartelera</a>
+            <a href="calendario.html" class="block px-4 py-3 rounded-xl hover:bg-white/5 text-gray-300">Calendario</a>
+            <a href="eventos.html" class="block px-4 py-3 rounded-xl hover:bg-white/5 text-gray-300">Eventos</a>
+            <a href="registro.html"
+                class="block px-4 py-3 rounded-xl bg-gradient-to-r from-yellow-500 to-amber-500 text-black font-bold text-center">Registro</a>
         </div>
     </div>
 
     <!-- Main Content -->
-    <div class="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
+    <div class="pt-32 pb-20 px-4 sm:px-6 lg:px-8 min-h-screen">
         <div class="max-w-7xl mx-auto">
             <!-- Header -->
-            <div class="text-center mb-12 space-y-4">
-                <h1 class="text-5xl md:text-6xl font-bold bg-gradient-to-r from-yellow-500 to-yellow-500 bg-clip-text text-transparent">
-                    Cartelera
+            <div class="text-center mb-16 space-y-6">
+                <h1 class="text-5xl md:text-6xl font-bold">
+                    Nuestra <span class="text-gradient">Cartelera</span>
                 </h1>
-                <p class="text-xl text-gray-400">
-                    Descubre nuestra selección de películas bajo la luna y las estrellas
+                <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+                    Descubre nuestra selección de películas bajo la luna y las estrellas. Desde clásicos inolvidables
+                    hasta los últimos estrenos.
                 </p>
             </div>
 
             <!-- Lista de películas -->
             <section>
-                <h2 class="text-3xl font-bold mb-8">Todas las Películas</h2>
-                <div id="movies-list" class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div id="movies-list" class="flex flex-col gap-6">
                     <!-- Movies will be loaded by JavaScript -->
                 </div>
             </section>
@@ -75,31 +90,36 @@
 
     <!-- Modal de trailer -->
     <div id="trailer-modal" class="modal">
-        <div class="modal-content max-w-4xl p-0">
+        <div class="modal-content max-w-4xl p-0 overflow-hidden bg-black">
             <div class="relative" style="padding-top: 56.25%;">
-                <button class="absolute top-4 right-4 z-10 modal-close bg-gray-900/80 text-white rounded-lg p-2">
+                <button
+                    class="absolute top-4 right-4 z-10 modal-close bg-black/50 hover:bg-black/80 text-white rounded-full p-2 backdrop-blur-sm transition-all">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
                     </svg>
                 </button>
-                <iframe id="trailer-iframe" class="absolute inset-0 w-full h-full rounded-lg" frameborder="0" allowfullscreen></iframe>
+                <iframe id="trailer-iframe" class="absolute inset-0 w-full h-full" frameborder="0"
+                    allowfullscreen></iframe>
             </div>
         </div>
     </div>
 
     <!-- Modal de reserva -->
     <div id="reserve-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="text-2xl font-bold" id="reserve-movie-title">Reservar Entrada</h3>
-                <button class="modal-close" onclick="closeReserveModal()">
+        <div class="modal-content glass-card border-0">
+            <div class="p-6 border-b border-white/10 flex items-center justify-between">
+                <h3 class="text-2xl font-bold text-gradient" id="reserve-movie-title">Reservar Entrada</h3>
+                <button class="modal-close hover:bg-white/10 rounded-lg p-2 transition-colors"
+                    onclick="closeReserveModal()">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
                     </svg>
                 </button>
             </div>
-            <div class="modal-body">
-                <p class="text-gray-400 mb-6">Selecciona una función disponible</p>
+            <div class="p-6">
+                <p class="text-gray-400 mb-6">Selecciona una función disponible para continuar con tu reserva.</p>
                 <div id="screenings-list" class="space-y-4">
                     <!-- Screenings will be loaded by JavaScript -->
                 </div>
@@ -108,15 +128,63 @@
     </div>
 
     <!-- Footer -->
-    <footer class="border-t border-gray-800 py-8 px-4">
-        <div class="max-w-7xl mx-auto text-center space-y-4">
-            <div class="flex justify-center items-center space-x-2">
-                <svg class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"></path>
-                </svg>
-                <span class="text-xl font-bold">CineMoon</span>
+    <footer class="border-t border-white/10 py-12 px-4 bg-black/40">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                <div class="col-span-1 md:col-span-2">
+                    <a href="index.html" class="flex items-center space-x-2 mb-6">
+                        <svg class="w-8 h-8 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z">
+                            </path>
+                        </svg>
+                        <span class="text-2xl font-bold text-white">CineMoon</span>
+                    </a>
+                    <p class="text-gray-400 max-w-sm">
+                        Transformamos espacios públicos en experiencias cinematográficas inolvidables.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-6">Enlaces Rápidos</h4>
+                    <ul class="space-y-4">
+                        <li><a href="cartelera.html"
+                                class="text-gray-400 hover:text-yellow-500 transition-colors">Cartelera</a></li>
+                        <li><a href="calendario.html"
+                                class="text-gray-400 hover:text-yellow-500 transition-colors">Calendario</a></li>
+                        <li><a href="eventos.html"
+                                class="text-gray-400 hover:text-yellow-500 transition-colors">Eventos</a></li>
+                        <li><a href="registro.html"
+                                class="text-gray-400 hover:text-yellow-500 transition-colors">Registro</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-6">Síguenos</h4>
+                    <div class="flex space-x-4">
+                        <a href="#"
+                            class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-yellow-500 hover:text-black transition-all">
+                            <span class="sr-only">Facebook</span>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                            </svg>
+                        </a>
+                        <a href="#"
+                            class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-pink-500 hover:text-white transition-all">
+                            <span class="sr-only">Instagram</span>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
             </div>
-            <p class="text-gray-400">© 2025 CineMoon. La magia del cine bajo las estrellas.</p>
+
+            <div class="border-t border-white/10 pt-8 text-center text-gray-500 text-sm">
+                <p>&copy; 2025 CineMoon. Todos los derechos reservados.</p>
+            </div>
         </div>
     </footer>
 
@@ -124,4 +192,5 @@
     <script src="main.js"></script>
     <script src="cartelera.js"></script>
 </body>
+
 </html>

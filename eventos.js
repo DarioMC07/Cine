@@ -7,7 +7,7 @@ function getLocationScreenings(locationName) {
 function loadLocations() {
     const container = document.getElementById('locations-list');
     const countEl = document.getElementById('locations-count');
-    
+
     if (countEl) {
         countEl.textContent = `${locations.length} Ubicaciones Únicas`;
     }
@@ -16,13 +16,18 @@ function loadLocations() {
 
     container.innerHTML = locations.map(location => {
         const locationScreenings = getLocationScreenings(location.name);
-        const upcomingScreenings = locationScreenings.filter(s => {
-            const screeningDate = new Date(s.date + ' ' + s.time);
-            return screeningDate > new Date();
-        }).slice(0, 3);
+
+        // Preferir proyecciones futuras; si no hay, mostrar las más cercanas (fallback)
+        const now = new Date();
+        const future = locationScreenings.filter(s => new Date(s.date + ' ' + s.time) > now);
+        let upcomingScreenings = future.slice(0, 3);
+        if (upcomingScreenings.length === 0) {
+            // fallback: mostrar las primeras 3 (podrían ser pasadas)
+            upcomingScreenings = locationScreenings.slice(0, 3);
+        }
 
         return `
-            <div class="bg-gray-800/50 rounded-2xl border border-gray-700 overflow-hidden hover:border-yellow-500 transition-colors">
+            <div class="glass-card overflow-hidden group">
                 <div class="grid grid-cols-1 lg:grid-cols-5 gap-0">
                     <div class="lg:col-span-2 relative aspect-[16/9] lg:aspect-auto">
                         <img src="${location.image}" alt="${location.name}" class="object-cover w-full h-full" />
@@ -79,17 +84,17 @@ function loadLocations() {
                                 </h4>
                                 <div class="space-y-2">
                                     ${upcomingScreenings.map(screening => {
-                                        const movie = movies.find(m => m.id === screening.movieId);
-                                        if (!movie) return '';
+            const movie = movies.find(m => m.id === screening.movieId);
+            if (!movie) return '';
 
-                                        const date = new Date(screening.date);
-                                        const dateStr = date.toLocaleDateString('es-ES', {
-                                            month: 'short',
-                                            day: 'numeric'
-                                        });
+            const date = new Date(screening.date);
+            const dateStr = date.toLocaleDateString('es-ES', {
+                month: 'short',
+                day: 'numeric'
+            });
 
-                                        return `
-                                            <div class="flex items-center justify-between p-3 bg-gray-900/50 rounded-lg hover:bg-gray-900 transition-colors">
+            return `
+                                            <div class="flex items-center justify-between p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors">
                                                 <div>
                                                     <p class="font-semibold">${movie.title}</p>
                                                     <p class="text-sm text-gray-400">
@@ -99,9 +104,12 @@ function loadLocations() {
                                                 <span class="font-bold text-yellow-500">
                                                     Bs ${screening.price.toFixed(2)}
                                                 </span>
-                                            </div>
+                    </div>
+                    <div class="mt-2 flex gap-2">
+                        <a href="cartelera.html?movie=${movie.id}" class="btn btn-primary w-full text-center text-sm">Reservar</a>
+                    </div>
                                         `;
-                                    }).join('')}
+        }).join('')}
                                 </div>
                                 <a href="calendario.html" class="block mt-3">
                                     <button class="btn-secondary w-full text-sm">
