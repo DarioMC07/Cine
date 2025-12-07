@@ -1,75 +1,81 @@
-// Load movies list
+// Load movies list - VERSION COMPACTA
 function loadMoviesList() {
     const container = document.getElementById('movies-list');
     if (!container) return;
 
-    // Grid responsive bien balanceado
-    container.className = 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 max-w-7xl mx-auto px-4';
+    // Grid super compacto con muchas columnas
+    container.className = 'grid gap-2 px-4 mx-auto max-w-7xl';
+    container.style.gridTemplateColumns = 'repeat(auto-fill, minmax(120px, 1fr))';
 
     container.innerHTML = movies.map(movie => `
-        <div class="group rounded-lg overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-2xl hover:shadow-yellow-500/50">
-            <!-- Card Container -->
-            <div class="bg-gradient-to-b from-white/5 to-white/0 rounded-lg overflow-hidden flex flex-col h-full">
+        <div class="relative group cursor-pointer" style="max-width: 180px; margin: 0 auto;">
+            <!-- Poster compacto -->
+            <div class="relative overflow-hidden rounded-lg" style="aspect-ratio: 2/3; background: #000;">
+                <img src="${movie.poster}" 
+                     alt="${movie.title}" 
+                     class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" 
+                     style="display: block;" />
                 
-                <!-- Poster Image (proporción 2:3) -->
-                <div class="relative aspect-[2/3] overflow-hidden bg-black/40 flex-shrink-0">
-                    <img src="${movie.poster}" alt="${movie.title}" 
-                         class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-115" />
+                ${movie.upcoming ? `
+                    <span class="absolute top-1 right-1 bg-yellow-500 text-black font-bold rounded-full" 
+                          style="font-size: 7px; padding: 2px 6px;">
+                        Próximo
+                    </span>
+                ` : ''}
+                
+                <!-- Overlay hover -->
+                <div class="absolute inset-0 bg-black opacity-0 group-hover:opacity-90 transition-opacity duration-300 flex flex-col justify-between" 
+                     style="padding: 8px;">
                     
-                    <!-- Badge Próximo -->
-                    ${movie.upcoming ? `
-                        <span class="absolute top-2 right-2 bg-gradient-to-r from-yellow-500 to-amber-500 text-black text-[10px] font-bold px-2 py-1 rounded-full shadow-lg">Próximo</span>
-                    ` : ''}
-                    
-                    <!-- Overlay con info al hover -->
-                    <div class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-between p-3">
-                        
-                        <!-- Título y Rating -->
-                        <div>
-                            <h3 class="text-white text-[11px] font-bold line-clamp-2 mb-2 leading-tight">${movie.title}</h3>
-                            <div class="flex items-center gap-1">
-                                <svg class="w-3 h-3 fill-yellow-500" viewBox="0 0 20 20">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
-                                <span class="text-white text-[10px] font-bold">${movie.rating}</span>
-                            </div>
+                    <div>
+                        <h3 class="text-white font-bold mb-1" 
+                            style="font-size: 9px; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                            ${movie.title}
+                        </h3>
+                        <div class="flex items-center gap-1">
+                            <svg class="fill-yellow-500" style="width: 8px; height: 8px;" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                            <span class="text-white font-bold" style="font-size: 8px;">${movie.rating}</span>
                         </div>
+                    </div>
 
-                        <!-- Info y Botones -->
-                        <div class="space-y-2">
-                            <div class="text-[9px] text-gray-300 space-y-0.5">
-                                <p>${movie.year} • ${movie.duration}min</p>
-                                <p class="line-clamp-1">${movie.genre[0]}</p>
-                            </div>
-                            
-                            <div class="flex gap-2 pt-2">
-                                <button onclick="event.stopPropagation(); openTrailer('${movie.trailer}')" 
-                                    class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-[9px] font-bold py-1.5 rounded transition-colors">
-                                    ▶ Trailer
-                                </button>
-                                <button onclick="event.stopPropagation(); openReserveModal(${movie.id})" 
-                                    class="flex-1 bg-yellow-500 hover:bg-yellow-600 text-black text-[9px] font-bold py-1.5 rounded transition-colors">
-                                    🎫 Reservar
-                                </button>
-                            </div>
+                    <div>
+                        <div class="text-gray-300 mb-1" style="font-size: 7px;">
+                            <p>${movie.year} • ${movie.duration}min</p>
+                            <p style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${movie.genre[0]}</p>
+                        </div>
+                        
+                        <div class="flex gap-1">
+                            <button onclick="event.stopPropagation(); openTrailer('${movie.trailer}')" 
+                                    class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded transition-colors"
+                                    style="font-size: 8px; padding: 4px 0;">
+                                ▶
+                            </button>
+                            <button onclick="event.stopPropagation(); openReserveModal(${movie.id})" 
+                                    class="flex-1 bg-yellow-500 hover:bg-yellow-600 text-black font-bold rounded transition-colors"
+                                    style="font-size: 8px; padding: 4px 0;">
+                                🎫
+                            </button>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Info Footer (siempre visible) -->
-                <div class="p-2.5 bg-black/40 flex-1 flex flex-col justify-between">
-                    <div>
-                        <h3 class="text-white text-[10px] font-bold line-clamp-1 mb-1">${movie.title}</h3>
-                        <div class="flex items-center justify-between text-[8px] text-gray-400">
-                            <span>${movie.year}</span>
-                            <span class="flex items-center gap-0.5">
-                                <svg class="w-2.5 h-2.5 fill-yellow-500" viewBox="0 0 20 20">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
-                                <span class="font-bold">${movie.rating}</span>
-                            </span>
-                        </div>
-                    </div>
+            <!-- Footer info -->
+            <div class="bg-black bg-opacity-40 rounded-b-lg" style="padding: 6px;">
+                <h3 class="text-white font-bold" 
+                    style="font-size: 9px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px;">
+                    ${movie.title}
+                </h3>
+                <div class="flex items-center justify-between text-gray-400" style="font-size: 7px;">
+                    <span>${movie.year}</span>
+                    <span class="flex items-center" style="gap: 2px;">
+                        <svg class="fill-yellow-500" style="width: 8px; height: 8px;" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                        <span class="font-bold">${movie.rating}</span>
+                    </span>
                 </div>
             </div>
         </div>
@@ -80,7 +86,6 @@ function loadMoviesList() {
 function openTrailer(trailerId) {
     const modal = document.getElementById('trailer-modal');
     const iframe = document.getElementById('trailer-iframe');
-
     iframe.src = `https://www.youtube.com/embed/${trailerId}?autoplay=1`;
     modal.classList.add('active');
 }
@@ -89,7 +94,6 @@ function openTrailer(trailerId) {
 function closeTrailerModal() {
     const modal = document.getElementById('trailer-modal');
     const iframe = document.getElementById('trailer-iframe');
-
     iframe.src = '';
     modal.classList.remove('active');
 }
