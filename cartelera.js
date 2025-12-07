@@ -1,18 +1,22 @@
-// Load movies list
+// Cargar lista de películas
 function loadMoviesList() {
     const container = document.getElementById('movies-list');
     if (!container) return;
 
-    container.className = 'grid grid-cols-2 md:grid-cols-3 gap-4 max-w-5xl mx-auto';
+    // Grid responsive: 1 col en móvil, 2 en tablet, 3 en desktop
+    container.className = 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-6xl mx-auto';
 
     container.innerHTML = movies.map(movie => `
         <div class="bg-white/5 rounded-xl backdrop-blur shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-yellow-500/20 hover:-translate-y-1 flex flex-col">
             
-            <div class="relative aspect-[2/3] overflow-hidden">
-                <img src="${movie.poster}" class="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500" />
+            <!-- Poster -->
+            <div class="relative aspect-[2/3] w-full overflow-hidden">
+                <img src="${movie.poster}" alt="${movie.title}"
+                    class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105" />
                 ${movie.upcoming ? `<span class="absolute top-2 right-2 bg-yellow-500 text-black text-[10px] font-bold px-2 py-1 rounded-md shadow">Próximamente</span>` : ''}
             </div>
 
+            <!-- Info -->
             <div class="p-3 flex flex-col flex-1">
                 <h3 class="text-sm font-bold line-clamp-1 mb-1">${movie.title}</h3>
 
@@ -26,12 +30,15 @@ function loadMoviesList() {
                     </span>
                 </div>
 
+                <!-- Botones -->
                 <div class="mt-auto flex gap-2">
-                    <button onclick="openTrailer('${movie.trailer}')" class="flex-1 bg-white/10 hover:bg-white/20 transition text-xs py-1.5 rounded-md">
+                    <button onclick="openTrailer('${movie.trailer}')"
+                        class="flex-1 bg-white/10 hover:bg-white/20 transition text-xs py-1.5 rounded-md">
                         Trailer
                     </button>
 
-                    <button onclick="openReserveModal(${movie.id})" class="flex-1 bg-yellow-600 hover:bg-yellow-500 text-black transition text-xs font-bold py-1.5 rounded-md">
+                    <button onclick="openReserveModal(${movie.id})"
+                        class="flex-1 bg-yellow-600 hover:bg-yellow-500 text-black transition text-xs font-bold py-1.5 rounded-md">
                         Ver Funciones
                     </button>
                 </div>
@@ -41,8 +48,7 @@ function loadMoviesList() {
     `).join('');
 }
 
-
-// Trailer modal
+// Modal de trailer
 function openTrailer(trailerId) {
     const modal = document.getElementById('trailer-modal');
     const iframe = document.getElementById('trailer-iframe');
@@ -57,8 +63,7 @@ function closeTrailerModal() {
     modal.classList.remove('active');
 }
 
-
-// Reserve modal (solo muestra funciones, sin compra)
+// Modal de funciones
 function openReserveModal(movieId) {
     const movie = movies.find(m => m.id === movieId);
     if (!movie) return;
@@ -97,7 +102,6 @@ function closeReserveModal() {
     document.getElementById('reserve-modal').classList.remove('active');
 }
 
-
 // Click afuera cierra modal
 ['trailer-modal','reserve-modal'].forEach(id => {
     document.getElementById(id)?.addEventListener('click', e => {
@@ -107,6 +111,5 @@ function closeReserveModal() {
     });
 });
 
-
-// Init
+// Inicializar cartelera
 loadMoviesList();
