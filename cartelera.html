@@ -81,7 +81,7 @@
 
             <!-- Lista de películas -->
             <section>
-                <div id="movies-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+                <div id="movies-list" class="flex flex-col gap-6">
                     <!-- Movies will be loaded by JavaScript -->
                 </div>
             </section>
@@ -92,9 +92,15 @@
     <div id="trailer-modal" class="modal">
         <div class="modal-content max-w-4xl p-0 overflow-hidden bg-black">
             <div class="relative" style="padding-top: 56.25%;">
-                <iframe id="trailer-iframe" class="absolute top-0 left-0 w-full h-full border-0"
-                        allowfullscreen="" allow="autoplay"></iframe>
-                <button class="modal-close absolute top-4 right-4 bg-black/80 text-white rounded-full w-10 h-10 flex items-center justify-center hover:bg-black/95 z-50" onclick="closeTrailerModal()">×</button>
+                <button
+                    class="absolute top-4 right-4 z-10 modal-close bg-black/50 hover:bg-black/80 text-white rounded-full p-2 backdrop-blur-sm transition-all">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+                <iframe id="trailer-iframe" class="absolute inset-0 w-full h-full" frameborder="0"
+                    allowfullscreen></iframe>
             </div>
         </div>
     </div>
@@ -103,12 +109,19 @@
     <div id="reserve-modal" class="modal">
         <div class="modal-content glass-card border-0">
             <div class="p-6 border-b border-white/10 flex items-center justify-between">
-                <h2 id="reserve-movie-title" class="text-2xl font-bold"></h2>
-                <button class="modal-close text-gray-400 hover:text-white text-2xl" onclick="closeReserveModal()">×</button>
+                <h3 class="text-2xl font-bold text-gradient" id="reserve-movie-title">Reservar Entrada</h3>
+                <button class="modal-close hover:bg-white/10 rounded-lg p-2 transition-colors"
+                    onclick="closeReserveModal()">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
             </div>
-            <div class="p-6 max-h-96 overflow-y-auto">
+            <div class="p-6">
+                <p class="text-gray-400 mb-6">Selecciona una función disponible para continuar con tu reserva.</p>
                 <div id="screenings-list" class="space-y-4">
-                    <!-- Screenings will be loaded here -->
+                    <!-- Screenings will be loaded by JavaScript -->
                 </div>
             </div>
         </div>
