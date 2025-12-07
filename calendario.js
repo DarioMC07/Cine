@@ -1,186 +1,342 @@
-// Load movies list
-function loadMoviesList() {
-    const container = document.getElementById('movies-list');
+// calendario.js (modificado para extender fechas hasta 10 nov 2025)
+
+let selectedDate = null;
+
+// Fecha final del calendario: ahora solo hasta el 7 de noviembre
+const CALENDAR_END_DATE = '2025-11-07';
+
+// Utility: convierte un Date a formato ISO (YYYY-MM-DD)
+function formatDateISO(date) {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+}
+
+// Devuelve todas las fechas entre start y end inclusive,
+// pero excluye el 23 de octubre
+function getDatesBetween(startISO, endISO) {
+    const res = [];
+    const cur = new Date(startISO);
+    const end = new Date(endISO);
+    cur.setHours(0, 0, 0, 0);
+    end.setHours(0, 0, 0, 0);
+
+    const excludedDates = ['2025-10-23']; // 🔹 Fechas que no se mostrarán
+
+    while (cur <= end) {
+        const iso = formatDateISO(cur);
+        if (!excludedDates.includes(iso)) {
+            res.push(iso);
+        }
+        cur.setDate(cur.getDate() + 1);
+    }
+
+    return res;
+}
+
+// Agrupa las proyecciones por fecha y asegura el rango hasta el 7 de noviembre
+function groupScreeningsByDate() {
+    const grouped = {};
+    (screenings || []).forEach(screening => {
+        if (!grouped[screening.date]) {
+            grouped[screening.date] = [];
+        }
+        grouped[screening.date].push(screening);
+    });
+
+    // Determinar inicio (24 oct si no hay screenings anteriores)
+    const existingDates = Object.keys(grouped).sort();
+    let startDateISO = existingDates.length > 0 ? existingDates[0] : '2025-10-24';
+
+    // Generar rango hasta el 7 de noviembre (sin 23 oct)
+    const allDates = getDatesBetween(startDateISO, CALENDAR_END_DATE);
+
+    // Completar días vacíos
+    allDates.forEach(d => {
+        if (!grouped[d]) grouped[d] = [];
+    });
+
+    return grouped;
+}
+
+
+
+// Group screenings by date and ensure range goes until CALENDAR_END_DATE
+function groupScreeningsByDate() {
+    const grouped = {};
+    // Agrupar proyecciones existentes
+    (screenings || []).forEach(screening => {
+        if (!grouped[screening.date]) {
+            grouped[screening.date] = [];
+        }
+        grouped[screening.date].push(screening);
+    });
+
+    // Si no hay screenings, aún queremos mostrar el rango (desde hoy o desde 2025-10-24?)
+    const existingDates = Object.keys(grouped).sort();
+    let startDateISO;
+
+    if (existingDates.length > 0) {
+        startDateISO = existingDates[0];
+    } else {
+        // si no hay proyecciones, toma como inicio hoy (o cámbialo a la fecha que quieras)
+        const today = new Date();
+        startDateISO = formatDateISO(today);
+    }
+
+    // Decide fecha final (constante o la máxima existente si es mayor)
+    const maxExisting = existingDates.length > 0 ? existingDates[existingDates.length - 1] : startDateISO;
+    // queremos que la fecha final sea al menos CALENDAR_END_DATE
+    const finalDateISO = (new Date(maxExisting) > new Date(CALENDAR_END_DATE)) ? maxExisting : CALENDAR_END_DATE;
+
+    // Rellenar días intermedios que falten entre startDateISO y finalDateISO
+    const allDates = getDatesBetween(startDateISO, finalDateISO);
+    allDates.forEach(d => {
+        if (!grouped[d]) grouped[d] = [];
+    });
+
+    return grouped;
+}
+
+// Load date filters
+function loadDateFilters() {
+    const container = document.getElementById('date-filters');
     if (!container) return;
 
-    // Set grid layout on container - 2 columnas compactas
-    container.className = 'grid grid-cols-2 md:grid-cols-2 gap-3 max-w-4xl mx-auto';
+    const groupedScreenings = groupScreeningsByDate();
+    const dates = Object.keys(groupedScreenings).sort();
 
-    container.innerHTML = movies.map(movie => `
-        <div class="glass-card overflow-hidden group rounded-lg flex flex-col h-full">
-            <div class="relative aspect-[2/3] overflow-hidden bg-gradient-to-br from-yellow-500/20 to-amber-500/20 max-h-64">
-                <img src="${movie.poster}" alt="${movie.title}" class="object-cover w-full h-full group-hover:scale-110 transition-transform duration-300" />
-                ${movie.upcoming ? `
-                    <span class="absolute top-2 right-2 badge text-xs">Próximamente</span>
-                ` : ''}
-            </div>
-            <div class="p-2 flex flex-col flex-grow">
-                <div class="flex-1">
-                    <div class="mb-1">
-                        <h3 class="text-sm font-bold line-clamp-1">${movie.title}</h3>
-                        <div class="flex items-center justify-between gap-1">
-                            <p class="text-xs text-gray-400">${movie.year} • ${movie.duration}min</p>
-                            <div class="flex items-center space-x-1">
-                                <svg class="w-3 h-3 fill-yellow-500" viewBox="0 0 20 20">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
-                                <span class="text-xs font-bold">${movie.rating}</span>
-                            </div>
-                        </div>
-                    </div>
+    const buttons = dates.map(date => {
+        const dateObj = new Date(date);
+        const month = dateObj.toLocaleDateString('es-ES', { month: 'short' });
+        const day = dateObj.getDate();
+
+        return `
+            <button 
+                onclick="filterByDate('${date}')" 
+                class="date-filter-btn flex items-center space-x-2 px-4 py-2 rounded-lg border transition-all ${selectedDate === date ? 'bg-yellow-500 border-yellow-500 text-black shadow-[0_0_15px_rgba(234,179,8,0.3)]' : 'bg-white/5 border-white/10 hover:border-yellow-500/50 text-gray-300'}"
+            >
+                <div class="flex flex-col items-center">
+                    <span class="text-xs ${selectedDate === date ? 'opacity-90' : 'opacity-70'}">${month}</span>
+                    <span class="text-xl font-bold">${day}</span>
                 </div>
-
-                <div class="flex gap-1 mt-auto">
-                    <button onclick="openTrailer('${movie.trailer}')" aria-label="Ver trailer de ${movie.title}" class="btn-secondary flex-1 text-xs py-1.5 flex items-center justify-center gap-1">
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                        </svg>
-                        Trailer
-                    </button>
-                    <button onclick="openReserveModal(${movie.id})" aria-label="Reservar entrada para ${movie.title}" class="btn-small flex-1 text-xs py-1.5">
-                        Reservar
-                    </button>
-                </div>
-            </div>
-        </div>
-    `).join('');
-}
-
-// Open trailer modal
-function openTrailer(trailerId) {
-    const modal = document.getElementById('trailer-modal');
-    const iframe = document.getElementById('trailer-iframe');
-
-    iframe.src = `https://www.youtube.com/embed/${trailerId}?autoplay=1`;
-    modal.classList.add('active');
-}
-
-// Close trailer modal
-function closeTrailerModal() {
-    const modal = document.getElementById('trailer-modal');
-    const iframe = document.getElementById('trailer-iframe');
-
-    iframe.src = '';
-    modal.classList.remove('active');
-}
-
-// Open reserve modal
-function openReserveModal(movieId) {
-    const movie = movies.find(m => m.id === movieId);
-    if (!movie) return;
-
-    const modal = document.getElementById('reserve-modal');
-    const title = document.getElementById('reserve-movie-title');
-    const screeningsList = document.getElementById('screenings-list');
-
-    title.textContent = `Reservar Entrada - ${movie.title}`;
-
-    const movieScreenings = screenings.filter(s => s.movieId === movieId);
-
-    if (movieScreenings.length === 0) {
-        screeningsList.innerHTML = `
-            <p class="text-center text-gray-400 py-8">
-                No hay funciones disponibles para esta película
-            </p>
+            </button>
         `;
-    } else {
-        screeningsList.innerHTML = movieScreenings.map(screening => {
-            const date = new Date(screening.date);
-            const dateStr = date.toLocaleDateString('es-ES', {
+    }).join('');
+
+    container.innerHTML = `
+        <button 
+            onclick="filterByDate(null)" 
+            class="date-filter-btn px-4 py-2 rounded-lg border transition-all ${selectedDate === null ? 'bg-yellow-500 border-yellow-500 text-black shadow-[0_0_15px_rgba(234,179,8,0.3)]' : 'bg-white/5 border-white/10 hover:border-yellow-500/50 text-gray-300'}"
+        >
+            Todas las fechas
+        </button>
+        ${buttons}
+    `;
+}
+
+// Filter by date
+function filterByDate(date) {
+    selectedDate = date;
+    loadDateFilters();
+    loadCalendar();
+}
+
+// Load calendar content
+function loadCalendar() {
+    const container = document.getElementById('calendar-content');
+    if (!container) return;
+
+    const groupedScreenings = groupScreeningsByDate();
+    const dates = Object.keys(groupedScreenings).sort();
+
+    if (selectedDate === null) {
+        // Show all dates
+        container.innerHTML = dates.map(date => {
+            const dateObj = new Date(date);
+            const dateStr = dateObj.toLocaleDateString('es-ES', {
                 weekday: 'long',
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric'
             });
+            const month = dateObj.toLocaleDateString('es-ES', { month: 'short' });
+            const day = dateObj.getDate();
+
+            const dayScreenings = groupedScreenings[date];
 
             return `
-                <div class="p-4 rounded-lg bg-white/5 border border-white/10 hover:border-yellow-500/50 transition-colors">
-                    <div class="flex items-center justify-between flex-wrap gap-4">
-                        <div class="flex-1">
-                            <p class="font-semibold text-lg capitalize">${dateStr}</p>
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="flex flex-col items-center justify-center w-16 h-16 bg-yellow-500/20 rounded-lg border-2 border-yellow-500">
+                            <span class="text-xs text-gray-400 uppercase">${month}</span>
+                            <span class="text-2xl font-bold text-yellow-500">${day}</span>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold capitalize">${dateStr}</h3>
                             <p class="text-gray-400">
-                                Hora: ${screening.time} • ${screening.location}
-                            </p>
-                            <p class="text-sm text-gray-400">
-                                ${screening.availableSeats} asientos disponibles
+                                ${dayScreenings.length} ${dayScreenings.length === 1 ? 'proyección' : 'proyecciones'}
                             </p>
                         </div>
-                        <div class="text-right">
-                            <p class="text-2xl font-bold text-yellow-500 mb-2">
-                                Bs ${screening.price.toFixed(2)}
-                            </p>
-                            <button onclick="buyTicket(${screening.id})" class="btn-small">
-                                Comprar
-                            </button>
-                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        ${renderScreeningCards(dayScreenings)}
                     </div>
                 </div>
             `;
         }).join('');
-    }
+    } else {
+        // Show selected date
+        const dateObj = new Date(selectedDate);
+        const dateStr = dateObj.toLocaleDateString('es-ES', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+        const month = dateObj.toLocaleDateString('es-ES', { month: 'short' });
+        const day = dateObj.getDate();
+        const dayScreenings = groupedScreenings[selectedDate] || [];
 
-    modal.classList.add('active');
+        container.innerHTML = `
+            <div class="space-y-6">
+                <div class="flex items-center space-x-3 mb-6">
+                    <div class="flex flex-col items-center justify-center w-20 h-20 bg-yellow-500/20 rounded-lg border-2 border-yellow-500">
+                        <span class="text-sm text-gray-400 uppercase">${month}</span>
+                        <span class="text-3xl font-bold text-yellow-500">${day}</span>
+                    </div>
+                    <div>
+                        <h3 class="text-3xl font-bold capitalize">${dateStr}</h3>
+                        <p class="text-gray-400">
+                            ${dayScreenings.length} ${dayScreenings.length === 1 ? 'proyección programada' : 'proyecciones programadas'}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    ${renderDetailedScreenings(dayScreenings)}
+                </div>
+            </div>
+        `;
+    }
 }
 
-// Close reserve modal
-function closeReserveModal() {
-    const modal = document.getElementById('reserve-modal');
-    modal.classList.remove('active');
+// Render screening cards (compact view)
+function renderScreeningCards(screeningsList) {
+    return screeningsList.map(screening => {
+        const movie = movies.find(m => m.id === screening.movieId);
+        if (!movie) return '';
+
+        return `
+            <div class="glass-card overflow-hidden group">
+                <div class="relative aspect-video">
+                    <img src="${movie.poster}" alt="${movie.title}" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300" />
+                    <div class="absolute top-2 right-2">
+                        <span class="badge bg-yellow-500 border-pink-500 text-white">
+                            ${screening.time || ''}
+                        </span>
+                    </div>
+                </div>
+                <div class="p-4 space-y-3">
+                    <h4 class="font-bold text-lg">${movie.title}</h4>
+                    
+                    <div class="space-y-2 text-sm">
+                        <p class="flex items-center text-gray-400">
+                            <svg class="w-4 h-4 mr-2 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            ${screening.time ? `${screening.time} • ${movie.duration} min` : `Sin horario • ${movie.duration} min`}
+                        </p>
+                        <p class="flex items-center text-gray-400">
+                            <svg class="w-4 h-4 mr-2 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                            </svg>
+                            ${screening.location || ''}
+                        </p>
+                        <p class="flex items-center text-gray-400">
+                            <svg class="w-4 h-4 mr-2 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path>
+                            </svg>
+                            ${typeof screening.availableSeats !== 'undefined' ? `${screening.availableSeats} asientos disponibles` : ''}
+                        </p>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-2">
+                        <span class="text-2xl font-bold text-yellow-500">
+                            ${typeof screening.price === 'number' ? `Bs ${screening.price.toFixed(2)}` : ''}
+                        </span>
+                        <button onclick="alert('¡Reserva confirmada!')" class="btn-small">
+                            Reservar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
 }
 
-// Buy ticket function
-function buyTicket(screeningId) {
-    alert('¡Reserva confirmada! En una aplicación real, esto procesaría el pago.');
-    closeReserveModal();
+// Render detailed screenings (expanded view)
+function renderDetailedScreenings(screeningsList) {
+    return screeningsList.map(screening => {
+        const movie = movies.find(m => m.id === screening.movieId);
+        if (!movie) return '';
+
+        return `
+            <div class="glass-card overflow-hidden hover:border-pink-500/50 transition-colors">
+                <div class="flex flex-col sm:flex-row">
+                    <div class="sm:w-1/3 relative aspect-[2/3] sm:aspect-auto">
+                        <img src="${movie.poster}" alt="${movie.title}" class="object-cover w-full h-full" />
+                    </div>
+                    <div class="sm:w-2/3 p-6 flex flex-col">
+                        <div class="flex-1 space-y-3">
+                            <h4 class="font-bold text-2xl">${movie.title}</h4>
+                            
+                            <div class="flex flex-wrap gap-2">
+                                ${movie.genre.slice(0, 3).map(g => `<span class="badge">${g}</span>`).join('')}
+                            </div>
+
+                            <div class="space-y-2 text-sm">
+                                <p class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span class="font-semibold">${screening.time || 'Sin horario'}</span>
+                                    <span class="text-gray-400 ml-2">• ${movie.duration} min</span>
+                                </p>
+                                <p class="flex items-center text-gray-400">
+                                    <svg class="w-4 h-4 mr-2 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                    </svg>
+                                    ${screening.location || ''}
+                                </p>
+                                <p class="flex items-center text-gray-400">
+                                    <svg class="w-4 h-4 mr-2 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path>
+                                    </svg>
+                                    ${typeof screening.availableSeats !== 'undefined' ? `${screening.availableSeats} asientos disponibles` : ''}
+                                </p>
+                            </div>
+
+                            <p class="text-sm text-gray-400 line-clamp-2">${movie.synopsis}</p>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-4 mt-auto">
+                            <span class="text-3xl font-bold text-yellow-500">
+                                ${typeof screening.price === 'number' ? `Bs ${screening.price.toFixed(2)}` : ''}
+                            </span>
+                            <button onclick="alert('¡Reserva confirmada!')" class="btn-small">
+                                Comprar Entrada
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
 }
-
-// Close modals when clicking outside
-document.getElementById('trailer-modal')?.addEventListener('click', (e) => {
-    if (e.target.id === 'trailer-modal') {
-        closeTrailerModal();
-    }
-});
-
-document.getElementById('reserve-modal')?.addEventListener('click', (e) => {
-    if (e.target.id === 'reserve-modal') {
-        closeReserveModal();
-    }
-});
-
-// Close modal buttons (any element with .modal-close)
-document.querySelectorAll('.modal-close').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        // try to close nearest modal
-        const modal = btn.closest('.modal');
-        if (modal) {
-            if (modal.id === 'trailer-modal') closeTrailerModal();
-            else if (modal.id === 'reserve-modal') closeReserveModal();
-            else modal.classList.remove('active');
-        }
-    });
-});
 
 // Initialize
-loadMoviesList();
-
-// If a movie id is provided in the query string (e.g. ?movie=3), open its reserve modal
-(function openReserveFromQuery() {
-    try {
-        const params = new URLSearchParams(window.location.search);
-        const movieParam = params.get('movie');
-        if (movieParam) {
-            const id = Number(movieParam);
-            if (!Number.isNaN(id)) {
-                // wait a moment so the DOM and modals are ready
-                setTimeout(() => {
-                    openReserveModal(id);
-                    // optionally scroll to top so modal is visible on some mobile browsers
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                }, 300);
-            }
-        }
-    } catch (e) {
-        // ignore
-    }
-})();
+loadDateFilters();
+loadCalendar();
