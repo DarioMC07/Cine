@@ -3,9 +3,9 @@ function loadMoviesList() {
     const container = document.getElementById('movies-list');
     if (!container) return;
 
-    // Grid perfectamente simétrico y balanceado
-    container.className = 'grid gap-5 max-w-7xl mx-auto px-4';
-    container.style.gridTemplateColumns = 'repeat(auto-fit, minmax(160px, 1fr))';
+    // Grid fijo: 2 columnas en todas las pantallas
+    container.className = 'grid gap-6 max-w-4xl mx-auto px-4';
+    container.style.gridTemplateColumns = 'repeat(2, 1fr)';
 
     container.innerHTML = movies.map(movie => `
         <div class="group rounded-xl overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-2xl hover:shadow-yellow-500/40 h-full">
@@ -19,16 +19,16 @@ function loadMoviesList() {
                     
                     <!-- Badge Próximo -->
                     ${movie.upcoming ? `
-                        <span class="absolute top-3 right-3 bg-gradient-to-r from-yellow-500 via-amber-500 to-orange-500 text-black text-[9px] font-bold px-2.5 py-1 rounded-full shadow-lg">🔥 Próximo</span>
+                        <span class="absolute top-3 right-3 bg-gradient-to-r from-yellow-500 via-amber-500 to-orange-500 text-black text-[10px] font-bold px-3 py-1.5 rounded-full shadow-lg">🔥 Próximo</span>
                     ` : ''}
                     
                     <!-- Overlay con info al hover -->
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-between p-3">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-between p-4">
                         
                         <!-- Título y Rating arriba -->
                         <div class="order-2">
-                            <h3 class="text-white text-sm font-bold line-clamp-2 mb-1.5 leading-snug drop-shadow-lg">${movie.title}</h3>
-                            <div class="flex items-center gap-1.5 bg-black/50 w-fit px-2 py-1 rounded-full backdrop-blur">
+                            <h3 class="text-white text-sm font-bold line-clamp-2 mb-2 leading-snug drop-shadow-lg">${movie.title}</h3>
+                            <div class="flex items-center gap-1.5 bg-black/50 w-fit px-2.5 py-1.5 rounded-full backdrop-blur">
                                 <svg class="w-3.5 h-3.5 fill-yellow-400" viewBox="0 0 20 20">
                                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                 </svg>
@@ -37,8 +37,8 @@ function loadMoviesList() {
                         </div>
 
                         <!-- Info y Botones abajo -->
-                        <div class="order-3 space-y-2.5">
-                            <div class="text-xs text-gray-200 space-y-0.5">
+                        <div class="order-3 space-y-3">
+                            <div class="text-xs text-gray-200 space-y-1">
                                 <p class="flex items-center gap-1">📅 ${movie.year} • ⏱️ ${movie.duration}min</p>
                                 <p class="flex items-center gap-1 line-clamp-1">🎭 ${movie.genre[0] || 'Drama'}</p>
                             </div>
@@ -60,18 +60,18 @@ function loadMoviesList() {
                 <!-- Info Footer (siempre visible) -->
                 <div class="p-3 bg-gradient-to-b from-black/40 to-black/60 flex-1 flex flex-col justify-between">
                     <div>
-                        <h3 class="text-white text-xs font-bold line-clamp-2 mb-1.5 leading-tight">${movie.title}</h3>
-                        <div class="flex items-center justify-between text-[10px] text-gray-300">
+                        <h3 class="text-white text-sm font-bold line-clamp-2 mb-2 leading-tight">${movie.title}</h3>
+                        <div class="flex items-center justify-between text-[11px] text-gray-300">
                             <span>${movie.year}</span>
                             <div class="flex items-center gap-0.5">
-                                <svg class="w-3 h-3 fill-yellow-400" viewBox="0 0 20 20">
+                                <svg class="w-3.5 h-3.5 fill-yellow-400" viewBox="0 0 20 20">
                                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                 </svg>
                                 <span class="font-bold">${movie.rating}</span>
                             </div>
                         </div>
                     </div>
-                    <p class="text-[9px] text-gray-400 mt-2">🎬 ${movie.duration} min</p>
+                    <p class="text-[10px] text-gray-400 mt-2">🎬 ${movie.duration} min</p>
                 </div>
             </div>
         </div>
