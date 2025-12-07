@@ -3,62 +3,41 @@ function loadMoviesList() {
     const container = document.getElementById('movies-list');
     if (!container) return;
 
-    // Set grid layout on container - ahora más columnas y más compacto
-    container.className = 'grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4';
+    // Set grid layout on container - 2 columnas compactas
+    container.className = 'grid grid-cols-2 md:grid-cols-2 gap-3 max-w-4xl mx-auto';
 
     container.innerHTML = movies.map(movie => `
         <div class="glass-card overflow-hidden group rounded-lg flex flex-col h-full">
-            <div class="relative aspect-[2/3] overflow-hidden bg-gradient-to-br from-yellow-500/20 to-amber-500/20">
+            <div class="relative aspect-[2/3] overflow-hidden bg-gradient-to-br from-yellow-500/20 to-amber-500/20 max-h-64">
                 <img src="${movie.poster}" alt="${movie.title}" class="object-cover w-full h-full group-hover:scale-110 transition-transform duration-300" />
                 ${movie.upcoming ? `
                     <span class="absolute top-2 right-2 badge text-xs">Próximamente</span>
                 ` : ''}
             </div>
-            <div class="p-3 flex flex-col flex-grow">
+            <div class="p-2 flex flex-col flex-grow">
                 <div class="flex-1">
-                    <div class="flex items-start justify-between gap-2 mb-2">
-                        <div class="flex-1 min-w-0">
-                            <h3 class="text-base font-bold mb-1 line-clamp-2">${movie.title}</h3>
-                            <p class="text-xs text-gray-400 italic line-clamp-1">${movie.originalTitle}</p>
+                    <div class="mb-1">
+                        <h3 class="text-sm font-bold line-clamp-1">${movie.title}</h3>
+                        <div class="flex items-center justify-between gap-1">
+                            <p class="text-xs text-gray-400">${movie.year} • ${movie.duration}min</p>
+                            <div class="flex items-center space-x-1">
+                                <svg class="w-3 h-3 fill-yellow-500" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                <span class="text-xs font-bold">${movie.rating}</span>
+                            </div>
                         </div>
-                        <div class="flex items-center space-x-1 flex-shrink-0">
-                            <svg class="w-3 h-3 fill-yellow-500 text-yellow-500" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            <span class="text-xs font-bold">${movie.rating}</span>
-                        </div>
                     </div>
-                    
-                    <div class="flex flex-wrap gap-1 mb-2">
-                        ${movie.genre.slice(0, 2).map(g => `<span class="badge text-xs">${g}</span>`).join('')}
-                    </div>
-
-                    <div class="space-y-1 mb-2 text-xs text-gray-400">
-                        <p class="flex items-center">
-                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                            </svg>
-                            ${movie.year}
-                        </p>
-                        <p class="flex items-center">
-                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                            ${movie.duration} min
-                        </p>
-                    </div>
-
-                    <p class="text-xs text-gray-400 mb-3 line-clamp-2">${movie.synopsis}</p>
                 </div>
 
-                <div class="flex gap-2 mt-auto">
-                    <button onclick="openTrailer('${movie.trailer}')" aria-label="Ver trailer de ${movie.title}" class="btn-secondary flex-1 text-xs py-2">
+                <div class="flex gap-1 mt-auto">
+                    <button onclick="openTrailer('${movie.trailer}')" aria-label="Ver trailer de ${movie.title}" class="btn-secondary flex-1 text-xs py-1.5 flex items-center justify-center gap-1">
                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                         </svg>
                         Trailer
                     </button>
-                    <button onclick="openReserveModal(${movie.id})" aria-label="Reservar entrada para ${movie.title}" class="btn-small flex-1 text-xs py-2">
+                    <button onclick="openReserveModal(${movie.id})" aria-label="Reservar entrada para ${movie.title}" class="btn-small flex-1 text-xs py-1.5">
                         Reservar
                     </button>
                 </div>
